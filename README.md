@@ -1,117 +1,74 @@
 # GPU Monitor for AI Workloads
 
-A unified desktop dashboard for multi-source GPU telemetry — AMD ROCm, NVIDIA, and Intel XPU.
+A native Windows desktop application (Electron) that provides a unified, interactive dashboard for GPU telemetry from multiple sources:
+
+- **AMD ROCm** GPUs via remote HTTP agent (`amd-smi`)
+- **NVIDIA** GPUs via `nvidia-smi` (local)
+- **Intel XPU** GPUs via remote HTTP agent (`xpu-smi`)
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=flat&logo=buymeacoffee&labelColor=5B5B5B)](https://buymeacoffee.com/riversde)
 
 ## Features
 
-- **Unified Dashboard** — View GPUs from multiple sources in a single grid layout
-- **Multi-Source Support** — AMD ROCm (HTTP agent), NVIDIA (local `nvidia-smi`), Intel XPU (HTTP agent)
-- **Draggable Cards** — Reorder GPU cards to keep your most important ones visible
-- **Source Filtering** — Filter by source with one click
-- **Dynamic Source Management** — Add, rename, and enable/disable sources from the settings panel
-- **Dark Theme** — Navy/blue theme with colour-coded accent borders per vendor
+- **Unified Dashboard** — all GPU types displayed side by side
+- **Draggable Tiles** — reorder GPU cards by dragging the handle
+- **Source Filtering** — filter by AMD, NVIDIA, or Intel
+- **Dark Navy Theme** — cyan for ROCm, green for NVIDIA, blue for Intel
+- **Custom Window Chrome** — frameless window with native controls
+- **Configurable Sources** — add/remove HTTP sources via Settings
+- **Auto-Polling** — configurable refresh interval (default: 2s)
+
+## Screenshots
+
+![GPU Monitor Dashboard](./screenshots/dashboard.png)
+
+## Installation
+
+### From Source
+
+```bash
+# Clone the repository
+git clone https://github.com/riversde/rocm-monitor.git
+cd rocm-monitor
+
+# Install dependencies
+npm install
+
+# Run the application
+npm start
+```
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- For NVIDIA: `nvidia-smi` available on PATH
+- For AMD: Deploy the [rocm-monitor-agent](https://github.com/riversde/rocm-monitor-agent) to a remote Linux machine
+- For Intel XPU: Deploy the [rocm-monitor-agent](https://github.com/riversde/rocm-monitor-agent) to a remote Linux machine
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Electron App                         │
-│  ┌──────────┐    ┌──────────────────────────────────┐   │
-│  │ Renderer  │    │          Dashboard UI            │   │
-│  │ (HTML/JS) │    │  GPU cards + settings + filters  │   │
-│  └─────┬─────┘    └──────────────────────────────────┘   │
-│        │                                                │
-│  ┌─────▼─────┐    ┌──────────────────────────────────┐   │
-│  │  Main     │    │   Local NVIDIA telemetry         │   │
-│  │ (Node.js) │───▶│   via nvidia-smi                 │   │
-│  └─────┬─────┘    └──────────────────────────────────┘   │
-│        │                                                │
-│  ┌─────▼─────┐    ┌──────────────────────────────────┐   │
-│  │  IPC      │    │   Remote ROCm/XPU telemetry      │   │
-│  │ Bridge    │───▶│   via HTTP agent (Flask)         │   │
-│  └───────────┘    └──────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│          GPU Monitor (Electron App)         │
+│  ┌──────────┬──────────┬──────────────────┐ │
+│  │ AMD ROCm │ NVIDIA   │ Intel XPU        │ │
+│  │ HTTP     │ nvidia-  │ HTTP             │ │
+│  │ Agent    │ smi      │ Agent            │ │
+│  └──────────┴──────────┴──────────────────┘ │
+└─────────────────────────────────────────────┘
 ```
-
-### GPU Sources
-
-| Source Type | Protocol | Agent | Platform |
-|-------------|----------|-------|----------|
-| **ROCm** | HTTP (Flask) | `rocm_agent.py` | Linux (AMD GPUs) |
-| **NVIDIA** | Local CLI | Built-in (`nvidia-smi`) | Windows/Linux |
-| **Intel XPU** | HTTP (Flask) | `xpu_agent.py` | Linux (Intel Arc/DC) |
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 18+
-- npm
-- Electron (bundled via `package.json`)
-- For NVIDIA: `nvidia-smi` on PATH (Windows/Linux)
-- For AMD ROCm: Python 3 + Flask, plus `amd-smi` tool (Linux)
-- For Intel XPU: Python 3 + Flask, plus `xpu-smi` (Intel XPU Manager) (Linux)
-
-### Install & Run
-
-```bash
-cd rocm-monitor
-npm install
-npx electron .
-```
-
-### Remote Agent Setup (AMD ROCm)
-
-Deploy the agent to the remote system:
-
-```bash
-scp rocm_monitor_agent/rocm_agent.py user@remote-host:/path/to/agent/
-ssh user@remote-host 'cd /path/to/agent && pip3 install flask && python3 rocm_agent.py'
-```
-
-The agent listens on port `5900` by default. Configure it in the app's Settings panel (⚙️ → Add Source → ROCm).
-
-### Remote Agent Setup (Intel XPU)
-
-Deploy the agent to the Intel GPU system:
-
-```bash
-scp rocm_monitor_agent/xpu_agent.py user@intel-host:/path/to/agent/
-ssh user@intel-host 'cd /path/to/agent && pip3 install flask && python3 xpu_agent.py'
-```
-
-The agent listens on port `5901` by default. Configure it in the app's Settings panel (⚙️ → Add Source → Intel XPU).
 
 ## Configuration
 
-Click ⚙️ **Settings** to:
+1. Open **Settings** (gear icon in header)
+2. **Sources tab** — add HTTP sources for AMD/Intel GPUs
+3. **General tab** — adjust refresh interval, always-on-top setting
 
-- Add/remove GPU sources (ROCm, NVIDIA, Intel XPU)
-- Rename sources (labels update dynamically on cards)
-- Toggle sources on/off
-- Adjust polling interval (default: 2s)
-- Test connections before saving
+## Buy Me a Coffee
 
-## Intel XPU Manager
+If you find this tool useful, consider buying me a coffee:
 
-For Intel GPU support, install [Intel XPU Manager](https://github.com/intel/xpumanager):
-
-```bash
-# Linux — follow the official installation guide:
-# https://intel.github.io/xpumanager/2.0/index.html
-```
-
-The `xpu_agent.py` uses `xpu-smi --query-gpu` and `xpu-smi stats` for telemetry.
-
-## AMD ROCm Agent
-
-The `rocm_agent.py` uses `amd-smi metric --json` for accurate telemetry including:
-- VRAM usage (total, used, free, percentage)
-- GPU/memory/hotspot temperatures
-- Fan speed (RPM and percentage)
-- Power draw and limits
-- Clock frequencies
-- PCIe throughput
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&labelColor=5B5B5B)](https://buymeacoffee.com/riversde)
 
 ## License
 

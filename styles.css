@@ -229,6 +229,19 @@ body {
   color: var(--text-secondary);
 }
 
+.footer a#btc-link {
+  -webkit-app-region: no-drag;
+  color: #FFDD00;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.15s;
+}
+.footer a#btc-link:hover {
+  color: #FFE84D;
+  transform: scale(1.05);
+}
+
 /* Modal */
 .modal {
   position: fixed;

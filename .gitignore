@@ -1,8 +1,6 @@
 node_modules/
-*.log
 dist/
-out/
+*.log
 .DS_Store
 Thumbs.db
-.hermes/
-mockup.html
+electron-builder.yml
