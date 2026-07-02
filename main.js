@@ -103,11 +103,11 @@ ipcMain.handle('load-sources', async () => {
   if (fs.existsSync(configPath)) {
     return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
   }
-  // Default sources
+  // Default sources — replace with your own config via Settings panel
   return {
     sources: [
-      { id: 'ai-pc', name: 'AI PC', type: 'rocm', host: '192.168.90.171', port: 5900, enabled: true },
-      { id: 'desktop-4090', name: 'Desktop RTX 4090', type: 'nvidia', local: true, enabled: true },
+      { id: 'remote-gpu', name: 'Remote GPU', type: 'rocm', host: '', port: 5900, enabled: false },
+      { id: 'local-nvidia', name: 'Local NVIDIA', type: 'nvidia', local: true, enabled: true },
     ],
     refreshInterval: 2000,
   };

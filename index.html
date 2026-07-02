@@ -17,10 +17,9 @@
         <span id="connection-status" class="status-badge disconnected">Disconnected</span>
       </div>
       <div class="header-right">
-        <!-- Source filter buttons -->
+        <!-- Source filter buttons — dynamically generated -->
         <button id="filter-all" class="filter-btn active" data-filter="all">All</button>
-        <button id="filter-ai-pc" class="filter-btn" data-filter="ai-pc">AI PC</button>
-        <button id="filter-desktop" class="filter-btn" data-filter="desktop-4090">Desktop</button>
+        <div id="filter-buttons" style="display:inline-flex;gap:4px;"></div>
         <span class="filter-separator"></span>
         <!-- Reorder mode -->
         <button id="btn-reorder" class="btn-icon" title="Reorder Cards" style="font-size:0.9rem;">↕️</button>

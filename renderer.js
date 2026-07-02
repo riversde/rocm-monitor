@@ -41,15 +41,39 @@ document.getElementById('btn-reorder').addEventListener('click', () => {
   });
 });
 
-// Filter buttons
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeFilter = btn.dataset.filter;
-    renderDashboard();
-  });
+// Filter buttons — static "All" + dynamic per-source
+document.getElementById('filter-all').addEventListener('click', () => {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('filter-all').classList.add('active');
+  activeFilter = 'all';
+  renderDashboard();
 });
+
+function renderSourceFilters() {
+  const container = document.getElementById('filter-buttons');
+  if (!container) return;
+  container.innerHTML = '';
+  const enabledSources = sources.sources.filter(s => s.enabled);
+  // Group by display name
+  const nameMap = {};
+  enabledSources.forEach(s => {
+    const key = s.name || s.type || s.id;
+    if (!nameMap[key]) nameMap[key] = key;
+  });
+  Object.values(nameMap).forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.filter = name;
+    btn.textContent = name;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = name;
+      renderDashboard();
+    });
+    container.appendChild(btn);
+  });
+}
 
 // Tab buttons
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -77,7 +101,7 @@ async function loadSources() {
     if (!sources?.sources || !Array.isArray(sources.sources)) {
       sources = {
         sources: [
-          { id: 'ai-pc', name: 'AI PC', type: 'rocm', host: '192.168.90.171', port: 5900, enabled: true },
+          { id: 'ai-pc', name: 'AI PC', type: 'rocm', host: '', port: 5900, enabled: false },
           { id: 'desktop-4090', name: 'Desktop RTX 4090', type: 'nvidia', local: true, enabled: true },
         ],
         refreshInterval: 2000,
@@ -91,16 +115,18 @@ async function loadSources() {
 
     refreshInterval = sources.refreshInterval || 2000;
     console.log('Sources loaded:', sources);
+    renderSourceFilters();
     startPolling();
   } catch (err) {
     console.error('Failed to load sources:', err);
     sources = {
       sources: [
-        { id: 'ai-pc', name: 'AI PC', type: 'rocm', host: '192.168.90.171', port: 5900, enabled: true },
-        { id: 'desktop-4090', name: 'Desktop RTX 4090', type: 'nvidia', local: true, enabled: true },
+        { id: 'ai-pc', name: 'AI PC', type: 'rocm', host: '', port: 5900, enabled: false },
+        { id: 'local-nvidia', name: 'Local NVIDIA', type: 'nvidia', local: true, enabled: true },
       ],
       refreshInterval: 2000,
     };
+    renderSourceFilters();
     startPolling();
   }
 }
@@ -211,6 +237,7 @@ async function saveSettings() {
   }
 
   closeSettings();
+  renderSourceFilters();
   startPolling();
 }
 

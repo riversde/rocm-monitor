@@ -65,22 +65,22 @@ npx electron .
 Deploy the agent to the remote system:
 
 ```bash
-scp rocm_agent.py user@remote-host:/path/to/agent/
+scp rocm_monitor_agent/rocm_agent.py user@remote-host:/path/to/agent/
 ssh user@remote-host 'cd /path/to/agent && pip3 install flask && python3 rocm_agent.py'
 ```
 
-The agent listens on port `5900` by default. Configure it in the app's Settings panel.
+The agent listens on port `5900` by default. Configure it in the app's Settings panel (⚙️ → Add Source → ROCm).
 
 ### Remote Agent Setup (Intel XPU)
 
 Deploy the agent to the Intel GPU system:
 
 ```bash
-scp xpu_agent.py user@intel-host:/path/to/agent/
+scp rocm_monitor_agent/xpu_agent.py user@intel-host:/path/to/agent/
 ssh user@intel-host 'cd /path/to/agent && pip3 install flask && python3 xpu_agent.py'
 ```
 
-The agent listens on port `5901` by default. Configure it in the app's Settings panel.
+The agent listens on port `5901` by default. Configure it in the app's Settings panel (⚙️ → Add Source → Intel XPU).
 
 ## Configuration
 
