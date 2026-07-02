@@ -99,6 +99,35 @@ npm start
 
 Two Flask HTTP agents expose GPU telemetry as JSON. Deploy these on remote Linux systems, then add them as HTTP sources in the Electron dashboard.
 
+### Unified Agent (recommended — standalone binary)
+
+A single self-contained binary that auto-detects AMD ROCm and Intel XPU GPUs. No Python required on the target machine.
+
+**Build (on Linux):**
+```bash
+pip3 install flask pyinstaller
+bash scripts/build_linux.sh
+# Output: dist/monitor_agent (~15MB ELF binary)
+```
+
+**Deploy to remote:**
+```bash
+scp dist/monitor_agent user@remote:/opt/gpu-monitor/
+ssh user@remote 'chmod +x /opt/gpu-monitor/monitor_agent'
+```
+
+**Run on target:**
+```bash
+/opt/gpu-monitor/monitor_agent              # auto-detect GPU type
+/opt/gpu-monitor/monitor_agent --type rocm  # force ROCm mode
+/opt/gpu-monitor/monitor_agent --type xpu   # force XPU mode
+/opt/gpu-monitor/monitor_agent --port 6000  # custom port
+```
+
+**Dependencies:** `amd-smi` (for AMD) or `xpu-smi` (for Intel) must be installed on the target. The binary itself is fully self-contained — no Python, no pip, no virtualenv.
+
+> **Note:** The external CLI tools (`amd-smi`, `rocm-smi`, `xpu-smi`) are hardware-specific and still need to be installed separately via your distro's ROCm/XPU packages. The agent binary only bundles the Python runtime and Flask.
+
 ### AMD ROCm Agent (`agent/rocm_agent.py`)
 
 Exposes comprehensive telemetry from AMD GPUs via `amd-smi`.

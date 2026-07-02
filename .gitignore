@@ -7,3 +7,5 @@ electron-builder.yml
 build/
 src/
 GIF images/
+# PyInstaller Linux binary (built locally, deployed to remote)
+dist/monitor_agent
