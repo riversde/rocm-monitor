@@ -2,6 +2,7 @@
   "name": "GPU-Monitor-AI",
   "version": "1.0.0",
   "description": "GPU Monitor for AI Workloads — Multi-source GPU telemetry dashboard",
+  "author": "riversde",
   "main": "main.js",
   "scripts": {
     "start": "electron . --disable-gpu",
@@ -18,13 +19,17 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "GPU Monitor for AI Workloads"
     }
   },
-  "dependencies": {
-    "electron": "^33.4.11"
-  },
   "devDependencies": {
+    "electron": "^33.4.11",
     "electron-builder": "^25.0.0"
   }
 }
