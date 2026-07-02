@@ -313,7 +313,18 @@ async function testConnection() {
   try {
     const resp = await fetch(`http://${targetSource.host}:${targetSource.port}/health`, { signal: AbortSignal.timeout(3000) });
     if (resp.ok) {
-      msgEl.textContent = `✓ Connected to ${targetSource.name}!`;
+      // Try to get actual GPU info for the message
+      let gpuName = targetSource.name;
+      try {
+        const dataResp = await fetch(`http://${targetSource.host}:${targetSource.port}/api/rocm`, { signal: AbortSignal.timeout(3000) });
+        if (dataResp.ok) {
+          const apiData = await dataResp.json();
+          if (apiData.gpus && apiData.gpus.length > 0) {
+            gpuName = apiData.gpus[0].name;
+          }
+        }
+      } catch {}
+      msgEl.textContent = `✓ Connected to ${gpuName}!`;
       msgEl.style.color = '#4ade80';
     } else {
       msgEl.textContent = `✗ HTTP ${resp.status}`;
