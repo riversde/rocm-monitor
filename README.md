@@ -2,11 +2,34 @@
 
 A native Windows desktop application (Electron) that provides a unified, interactive dashboard for GPU telemetry from multiple sources:
 
-- **AMD ROCm** GPUs via remote HTTP agent (`amd-smi`)
+- **AMD ROCm** GPUs via `amd-smi` (remote HTTP agent)
 - **NVIDIA** GPUs via `nvidia-smi` (local)
-- **Intel XPU** GPUs via remote HTTP agent (`xpu-smi`)
+- **Intel XPU** GPUs via `xpu-smi` (remote HTTP agent)
 
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=flat&logo=buymeacoffee&labelColor=5B5B5B)](https://buymeacoffee.com/riversde)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&labelColor=5B5B5B)](https://buymeacoffee.com/riversde)
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Run the dashboard
+npm start
+```
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────────────┐
+│              GPU Monitor (Electron App)               │
+│  ┌───────────┬───────────┬──────────────────────────┐ │
+│  │ AMD ROCm  │ NVIDIA    │ Intel XPU                │ │
+│  │ HTTP Agent│ nvidia-smi│ HTTP Agent               │ │
+│  │ (remote)  │ (local)   │ (remote)                 │ │
+│  └───────────┴───────────┴──────────────────────────┘ │
+└──────────────────────────────────────────────────────┘
+```
 
 ## Features
 
@@ -18,44 +41,44 @@ A native Windows desktop application (Electron) that provides a unified, interac
 - **Configurable Sources** — add/remove HTTP sources via Settings
 - **Auto-Polling** — configurable refresh interval (default: 2s)
 
-## Screenshots
+## Agents (included in `agent/`)
 
-![GPU Monitor Dashboard](./screenshots/dashboard.png)
+Two Flask HTTP agents that expose GPU telemetry as JSON for the dashboard. Deploy these on remote Linux systems.
 
-## Installation
-
-### From Source
+### AMD ROCm Agent (`agent/rocm_agent.py`)
 
 ```bash
-# Clone the repository
-git clone https://github.com/riversde/rocm-monitor.git
-cd rocm-monitor
-
-# Install dependencies
-npm install
-
-# Run the application
-npm start
+pip install flask
+python agent/rocm_agent.py    # listens on 0.0.0.0:5900
 ```
 
-### Prerequisites
+**Dependencies:** Python 3, Flask, `amd-smi` (AMD System Management Interface)
 
-- Node.js 18+ and npm
-- For NVIDIA: `nvidia-smi` available on PATH
-- For AMD: Deploy the [rocm-monitor-agent](https://github.com/riversde/rocm-monitor-agent) to a remote Linux machine
-- For Intel XPU: Deploy the [rocm-monitor-agent](https://github.com/riversde/rocm-monitor-agent) to a remote Linux machine
+### Intel XPU Agent (`agent/xpu_agent.py`)
 
-## Architecture
-
+```bash
+pip install flask
+python agent/xpu_agent.py     # listens on 0.0.0.0:5901
 ```
-┌─────────────────────────────────────────────┐
-│          GPU Monitor (Electron App)         │
-│  ┌──────────┬──────────┬──────────────────┐ │
-│  │ AMD ROCm │ NVIDIA   │ Intel XPU        │ │
-│  │ HTTP     │ nvidia-  │ HTTP             │ │
-│  │ Agent    │ smi      │ Agent            │ │
-│  └──────────┴──────────┴──────────────────┘ │
-└─────────────────────────────────────────────┘
+
+**Dependencies:** Python 3, Flask, [Intel XPU Manager](https://github.com/intel/xpumanager) (`xpu-smi`)
+
+> **Note:** Intel XPU Manager (`xpu-smi`) is **Linux-only**. The agent cannot run on Windows. For Windows hosts with Intel GPUs, use a remote Linux machine running this agent and add it as an HTTP source in the Electron dashboard.
+
+### Agent Endpoints (both)
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /health` | Health check — returns `{"status": "ok"}` |
+| `GET /api/rocm` or `/api/xpu` | Parsed GPU telemetry JSON |
+| `GET /api/rocm/raw` or `/api/xpu/raw` | Raw CLI output for debugging |
+
+### systemd Deployment
+
+Copy `agent/rocm-monitor.service` to `/etc/systemd/system/`, edit the path, then:
+
+```bash
+sudo systemctl enable --now rocm-monitor
 ```
 
 ## Configuration

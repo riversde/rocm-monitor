@@ -52,10 +52,10 @@
               HTTP connections require the monitoring agent to be installed on the remote endpoint.<br><br>
               <strong>Setup:</strong><br>
               1. Install Python 3.x on the remote machine<br>
-              2. Clone the agent: <code>git clone https://github.com/riversde/rocm-monitor-agent.git</code><br>
+              2. Clone the agent: <code>git clone https://github.com/riversde/rocm-monitor.git</code><br>
               3. Install dependencies: <code>pip install flask</code><br>
               4. Install <code>amd-smi</code> (ROCm) or <code>xpumanager</code> (Intel XPU)<br>
-              5. Run the agent: <code>python rocm_agent.py</code> (default port 5900)<br>
+              5. Run the agent: <code>python agent/rocm_agent.py</code> (default port 5900)<br>
               6. Ensure the firewall allows inbound connections on the chosen port<br><br>
               The agent exposes a REST API at <code>/api/rocm</code> that this dashboard polls for telemetry data.
             </div>
