@@ -12,6 +12,10 @@
 
 ![GPU Monitor Dashboard](screenshots/dashboard.png)
 
+### Demo
+
+![GPU Monitor Demo](screenshots/demo.gif)
+
 ---
 
 ## At a Glance
