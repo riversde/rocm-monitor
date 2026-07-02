@@ -1,0 +1,30 @@
+{
+  "name": "gpu-monitor-ai",
+  "version": "1.0.0",
+  "description": "GPU Monitor for AI Workloads — Multi-source GPU telemetry dashboard",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.pedro.gpu-monitor-ai",
+    "productName": "GPU Monitor for AI Workloads",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "dependencies": {
+    "electron": "^33.4.11"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.0.0"
+  }
+}

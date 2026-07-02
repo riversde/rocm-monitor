@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPU Monitor for AI Workloads</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:* http://127.0.0.1:* http://*:*;">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>GPU Monitor for AI Workloads</h1>
+        <span id="connection-status" class="status-badge disconnected">Disconnected</span>
+      </div>
+      <div class="header-right">
+        <!-- Source filter buttons -->
+        <button id="filter-all" class="filter-btn active" data-filter="all">All</button>
+        <button id="filter-ai-pc" class="filter-btn" data-filter="ai-pc">AI PC</button>
+        <button id="filter-desktop" class="filter-btn" data-filter="desktop-4090">Desktop</button>
+        <span class="filter-separator"></span>
+        <!-- Reorder mode -->
+        <button id="btn-reorder" class="btn-icon" title="Reorder Cards" style="font-size:0.9rem;">↕️</button>
+        <!-- Window controls -->
+        <button id="btn-settings" class="btn-icon" title="Settings">⚙️</button>
+        <button id="btn-minimize" class="btn-icon" title="Minimize">─</button>
+        <button id="btn-close" class="btn-icon" title="Close">×</button>
+      </div>
+    </header>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Settings</h2>
+
+        <!-- Tabs -->
+        <div class="modal-tabs">
+          <button class="tab-btn active" data-tab="sources">Sources</button>
+          <button class="tab-btn" data-tab="general">General</button>
+        </div>
+
+        <!-- Sources Tab -->
+        <div id="tab-sources" class="tab-content active">
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;">Change names — they update on dashboard tiles immediately.</p>
+          <div id="sources-list"></div>
+          <button id="btn-add-source" class="btn btn-secondary" style="margin-top: 12px;">+ Add Source</button>
+        </div>
+
+        <!-- General Tab -->
+        <div id="tab-general" class="tab-content">
+          <div class="form-group">
+            <label for="refresh-interval">Refresh Interval (seconds)</label>
+            <input type="number" id="refresh-interval" placeholder="2" min="1" max="60">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="btn-test-connection" class="btn btn-secondary">Test Connection</button>
+          <button id="btn-save-settings" class="btn btn-primary">Save</button>
+          <button id="btn-cancel-settings" class="btn btn-secondary">Cancel</button>
+        </div>
+        <div id="settings-message"></div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <main id="dashboard">
+      <div id="gpu-container" class="gpu-grid">
+        <!-- GPU cards injected by renderer.js -->
+      </div>
+      <div id="no-data" class="no-data hidden">
+        <p>No GPUs detected</p>
+        <span class="hint">Add sources in Settings → Sources tab</span>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span id="last-update">Waiting for data...</span>
+      <span id="poll-count">Polls: 0</span>
+    </footer>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

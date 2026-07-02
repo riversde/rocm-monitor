@@ -1,0 +1,83 @@
+"""Create proper ICO and PNG icons for ROCM Monitor."""
+import struct
+import zlib
+import os
+
+def create_ico(path):
+    """Create a 32x32 ICO file with a blue GPU-themed icon."""
+    size = 32
+    
+    # Generate pixel data (BGRA, top-to-bottom)
+    pixel_rows = []
+    for y in range(size):
+        row = bytearray()
+        for x in range(size):
+            if x == 0 or x == size-1 or y == 0 or y == size-1:
+                row.extend([255, 255, 255, 255])  # white border
+            elif x < 3 or x > size-4 or y < 3 or y > size-4:
+                row.extend([80, 160, 255, 255])   # light blue
+            else:
+                row.extend([0, 100, 200, 255])     # dark blue
+        pixel_rows.append(bytes(row))
+    
+    pixel_data = b''.join(pixel_rows)
+    
+    # BMP info header (40 bytes)
+    bmp_header = struct.pack('<IiiHHIIiiII',
+        40, size, size*2, 1, 32,
+        0, size*size*4, 2835, 2835, 0, 0
+    )
+    
+    # AND mask (1 bit per pixel)
+    and_mask = b'\x00' * ((size + 31) // 32 * 4 * size)
+    
+    image_data = bmp_header + pixel_data + and_mask
+    
+    # ICO directory entry
+    dir_entry = struct.pack('<BBBBHHII',
+        size, size, 0, 0, 1, 1,
+        len(image_data), 22
+    )
+    
+    # ICO header
+    ico_header = struct.pack('<HHH', 0, 1, 1)
+    
+    with open(path, 'wb') as f:
+        f.write(ico_header + dir_entry + image_data)
+    
+    print(f"Created {path} ({os.path.getsize(path)} bytes)")
+
+def create_tray_png(path):
+    """Create a 16x16 PNG for tray icon."""
+    sig = b'\x89PNG\r\n\x1a\n'
+    
+    # IHDR
+    ihdr_data = struct.pack('>IIBBBBB', 16, 16, 8, 6, 0, 0, 0)
+    ihdr_crc = zlib.crc32(b'IHDR' + ihdr_data) & 0xffffffff
+    ihdr = struct.pack('>I', 13) + b'IHDR' + ihdr_data + struct.pack('>I', ihdr_crc)
+    
+    # IDAT - blue with white border
+    raw = b''
+    for y in range(16):
+        raw += b'\x00'  # filter byte
+        for x in range(16):
+            if x == 0 or x == 15 or y == 0 or y == 15:
+                raw += b'\xff\xff\xff\xff'
+            else:
+                raw += b'\x50\xa0\xff\xff'
+    compressed = zlib.compress(raw)
+    idat_crc = zlib.crc32(b'IDAT' + compressed) & 0xffffffff
+    idat = struct.pack('>I', len(compressed)) + b'IDAT' + compressed + struct.pack('>I', idat_crc)
+    
+    # IEND
+    iend_crc = zlib.crc32(b'IEND') & 0xffffffff
+    iend = struct.pack('>I', 0) + b'IEND' + struct.pack('>I', iend_crc)
+    
+    with open(path, 'wb') as f:
+        f.write(sig + ihdr + idat + iend)
+    
+    print(f"Created {path} ({os.path.getsize(path)} bytes)")
+
+os.makedirs('D:/Hermes Projects/rocm-monitor/build', exist_ok=True)
+create_ico('D:/Hermes Projects/rocm-monitor/build/icon.ico')
+create_tray_png('D:/Hermes Projects/rocm-monitor/build/tray.png')
