@@ -12,7 +12,6 @@ let pollCount = 0;
 let activeFilter = 'all';
 let gpuOrder = [];       // persistent card order (array of unique gpu keys)
 let dragState = null;    // { el, index, startY, sourceId, gpuIndex }
-let reorderMode = false; // whether cards are draggable
 
 // DOM elements
 const elGpuContainer = document.getElementById('gpu-container');
@@ -185,11 +184,11 @@ function renderSourceEntries() {
     el.addEventListener('change', () => {}); // handled in saveSettings via querySelectorAll
   });
 
-  // Add reorder buttons to source entries
+  // Add reorder buttons to source entries (settings modal only, not drag handles)
   list.querySelectorAll('.source-entry-header strong').forEach(label => {
-    if (!label.querySelector('.reorder-handle')) {
+    if (!label.querySelector('.source-reorder-handle')) {
       const handle = document.createElement('span');
-      handle.className = 'reorder-handle';
+      handle.className = 'source-reorder-handle';
       handle.textContent = '⠿';
       handle.title = 'Drag to reorder source';
       handle.style.cursor = 'grab';
@@ -649,14 +648,8 @@ function renderDashboard(allGpus) {
       </div>`;
   }).join('');
 
-  // Re-attach drag events on newly created cards
+  // Drag events are always active — no toggle needed
   attachDragEvents();
-
-  // Re-apply reorder mode state to new cards
-  elGpuContainer.querySelectorAll('.gpu-card').forEach(card => {
-    card.draggable = reorderMode;
-    card.style.opacity = reorderMode ? '0.85' : '1';
-  });
 }
 
 // ====== Drag & Drop (handle-based) ======
