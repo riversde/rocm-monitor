@@ -44,6 +44,7 @@ function saveWindowBounds(bounds) {
 function createWindow() {
   const savedBounds = loadWindowBounds();
   const winOpts = {
+    frame: false,               // no native OS title bar — custom header handles everything
     width: savedBounds?.width || 960,
     height: savedBounds?.height || 720,
     minWidth: 700,
@@ -255,6 +256,13 @@ ipcMain.handle('run-nvidia-smi', async () => {
 // IPC: Window controls from renderer
 ipcMain.on('window-minimize', () => {
   if (mainWindow) mainWindow.minimize();
+});
+
+ipcMain.on('window-maximize', () => {
+  if (mainWindow) {
+    if (mainWindow.isMaximized()) mainWindow.unmaximize();
+    else mainWindow.maximize();
+  }
 });
 
 ipcMain.on('window-close', () => {

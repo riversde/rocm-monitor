@@ -28,6 +28,7 @@ document.getElementById('btn-save-settings').addEventListener('click', saveSetti
 document.getElementById('btn-test-connection').addEventListener('click', testConnection);
 document.getElementById('btn-add-source').addEventListener('click', addSourceEntry);
 document.getElementById('btn-minimize').addEventListener('click', minimizeWindow);
+document.getElementById('btn-maximize').addEventListener('click', maximizeWindow);
 document.getElementById('btn-close').addEventListener('click', closeWindow);
 
 // Filter buttons — static "All" + dynamic per-source
@@ -144,6 +145,18 @@ async function openSettings() {
 
 function closeSettings() {
   elSettingsModal.classList.add('hidden');
+}
+
+function minimizeWindow() {
+  if (window.electronAPI) window.electronAPI.minimize();
+}
+
+function maximizeWindow() {
+  if (window.electronAPI) window.electronAPI.maximize();
+}
+
+function closeWindow() {
+  if (window.electronAPI) window.electronAPI.close();
 }
 
 function renderSourceEntries() {

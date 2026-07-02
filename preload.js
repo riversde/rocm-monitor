@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadSources: () => ipcRenderer.invoke('load-sources'),
   runNvidiaSmi: () => ipcRenderer.invoke('run-nvidia-smi'),
   minimize: () => ipcRenderer.send('window-minimize'),
+  maximize: () => ipcRenderer.send('window-maximize'),
   close: () => ipcRenderer.send('window-close'),
   onOpenSettings: (callback) => ipcRenderer.on('open-settings', (_event) => callback()),
   setAlwaysOnTop: (enabled) => ipcRenderer.send('set-always-on-top', enabled),
