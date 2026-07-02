@@ -297,18 +297,16 @@ async function testConnection() {
     return;
   }
 
-  // Find first enabled ROCm source
-  const rocmSource = sources.sources.find(s => s.type === 'rocm' && s.enabled && s.host);
-  const xpuSource = sources.sources.find(s => s.type === 'xpu' && s.enabled && s.host);
-  const targetSource = rocmSource || xpuSource;
-  if (!targetSource) {
+  // Find first enabled HTTP source (any type with host)
+  const httpSource = sources.sources.find(s => s.enabled && s.host);
+  if (!httpSource) {
     // Check what sources ARE enabled
-    const nvidiaEnabled = sources.sources.some(s => s.type === 'nvidia' && s.enabled && s.local);
+    const nvidiaLocalEnabled = sources.sources.some(s => s.type === 'nvidia' && s.enabled && s.local);
     const hasAnyEnabled = sources.sources.some(s => s.enabled);
-    if (nvidiaEnabled && !hasAnyEnabled) {
-      msgEl.textContent = 'No HTTP sources configured. Test available for ROCm/XPU sources only.';
+    if (nvidiaLocalEnabled && !hasAnyEnabled) {
+      msgEl.textContent = 'No remote sources configured. Test available for HTTP-based sources.';
     } else if (hasAnyEnabled) {
-      msgEl.textContent = 'No HTTP sources with host configured. Add an HTTP source in the Sources tab to test.';
+      msgEl.textContent = 'No remote sources with host configured. Add an HTTP source in the Sources tab to test.';
     } else {
       msgEl.textContent = 'No sources enabled. Enable at least one source in the Sources tab.';
     }
@@ -320,12 +318,12 @@ async function testConnection() {
   msgEl.style.color = '#fbbf24';
 
   try {
-    const resp = await fetch(`http://${targetSource.host}:${targetSource.port}/health`, { signal: AbortSignal.timeout(3000) });
+    const resp = await fetch(`http://${httpSource.host}:${httpSource.port}/health`, { signal: AbortSignal.timeout(3000) });
     if (resp.ok) {
       // Try to get actual GPU info for the message
-      let gpuName = targetSource.name;
+      let gpuName = httpSource.name;
       try {
-        const dataResp = await fetch(`http://${targetSource.host}:${targetSource.port}/api/rocm`, { signal: AbortSignal.timeout(3000) });
+        const dataResp = await fetch(`http://${httpSource.host}:${httpSource.port}/api/rocm`, { signal: AbortSignal.timeout(3000) });
         if (dataResp.ok) {
           const apiData = await dataResp.json();
           if (apiData.gpus && apiData.gpus.length > 0) {
