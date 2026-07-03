@@ -79,6 +79,27 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
+// HTTP info tooltip — click toggle (more reliable than hover in Electron)
+const httpInfoIcon = document.getElementById('http-info-icon');
+const httpTooltip = document.getElementById('http-tooltip');
+if (httpInfoIcon && httpTooltip) {
+  httpInfoIcon.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isVisible = httpTooltip.style.display === 'block';
+    httpTooltip.style.display = isVisible ? 'none' : 'block';
+  });
+  // Close tooltip when clicking outside
+  document.addEventListener('click', () => {
+    httpTooltip.style.display = 'none';
+  });
+}
+
+// Inline test connection button
+const btnTestInline = document.getElementById('btn-test-connection-inline');
+if (btnTestInline) {
+  btnTestInline.addEventListener('click', testConnection);
+}
+
 // Electron IPC
 if (window.electronAPI) {
   window.electronAPI.onOpenSettings?.(() => openSettings());
@@ -164,8 +185,11 @@ function renderSourceEntries() {
   list.innerHTML = sources.sources.map((src, idx) => `
     <div class="source-entry" data-index="${idx}">
       <div class="source-entry-header">
-        <strong>${src.name || 'Untitled'}</strong>
-        <div style="display:flex;gap:4px;align-items:center;">
+        <strong style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+          <span class="source-reorder-handle" style="cursor:grab;margin-right:4px;opacity:0.5;font-size:0.9rem;" title="Drag to reorder">⠿</span>
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${src.name || 'Untitled'}</span>
+        </strong>
+        <div style="display:flex;gap:4px;align-items:center;flex-shrink:0;">
           <select class="source-type-select" data-index="${idx}">
             <option value="rocm" ${src.type === 'rocm' ? 'selected' : ''}>HTTP (ROCm)</option>
             <option value="nvidia" ${src.type === 'nvidia' ? 'selected' : ''}>NVIDIA (Local)</option>
@@ -199,19 +223,6 @@ function renderSourceEntries() {
   // Add event listeners for change events
   list.querySelectorAll('input, select').forEach(el => {
     el.addEventListener('change', () => {}); // handled in saveSettings via querySelectorAll
-  });
-
-  // Add reorder buttons to source entries (settings modal only, not drag handles)
-  list.querySelectorAll('.source-entry-header strong').forEach(label => {
-    if (!label.querySelector('.source-reorder-handle')) {
-      const handle = document.createElement('span');
-      handle.className = 'source-reorder-handle';
-      handle.textContent = '⠿';
-      handle.title = 'Drag to reorder source';
-      handle.style.cursor = 'grab';
-      handle.style.marginRight = '8px';
-      label.insertBefore(handle, label.firstChild);
-    }
   });
 
   // Attach remove button listeners (using event delegation on the list)

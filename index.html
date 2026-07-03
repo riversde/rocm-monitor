@@ -32,7 +32,7 @@
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal hidden">
       <div class="modal-content">
-        <h2>Settings</h2>
+        <h2 style="font-size:1.1rem;">Settings</h2>
 
         <!-- Tabs -->
         <div class="modal-tabs">
@@ -42,28 +42,29 @@
 
         <!-- Sources Tab -->
         <div id="tab-sources" class="tab-content active">
-          <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;">Change names — they update on dashboard tiles immediately.</p>
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;word-break:break-word;">Edit source names below — changes reflect on dashboard tiles immediately.</p>
           <div id="sources-list"></div>
           <button id="btn-add-source" class="btn btn-secondary" style="margin-top: 12px;">+ Add Source</button>
-          <div style="margin-top: 14px; position: relative; display: inline-block;">
+          <div style="margin-top: 14px; display: flex; align-items: center; gap: 10px;">
+            <button id="btn-test-connection-inline" class="btn btn-secondary" style="padding:5px 12px;font-size:0.8rem;">Test Connection</button>
             <span class="http-info-icon" id="http-info-icon" title="HTTP source information">i</span>
-            <div class="http-tooltip" id="http-tooltip">
-              <strong>HTTP Sources (ROCm / Intel XPU)</strong><br><br>
-              HTTP connections require the monitoring agent to be installed on the remote endpoint.<br><br>
-              <strong>Quick Setup (Linux):</strong><br>
-              1. Clone this repo: <code>git clone https://github.com/riversde/GPU-AI-Monitor.git</code><br>
-              2. Install Flask: <code>pip3 install flask</code><br>
-              3. Ensure GPU CLI tools are installed:<br>
-              &nbsp;&nbsp;• AMD ROCm: <code>amd-smi</code> / <code>rocm-smi</code><br>
-              &nbsp;&nbsp;• Intel XPU: <code>xpu-smi</code> / <code>xpumanager</code><br>
-              4. Run the agent: <code>python3 agent/monitor_agent.py --type rocm</code><br>
-              &nbsp;&nbsp;(or <code>--type xpu</code> for Intel, or omit for auto-detect)<br>
-              5. Ensure the firewall allows inbound connections on the chosen port<br><br>
-              <strong>Standalone binary (no Python needed):</strong><br>
-              Build with: <code>bash scripts/build_linux.sh</code> → outputs <code>dist/monitor_agent</code><br>
-              Deploy and run: <code>./dist/monitor_agent --type rocm --port 5900</code><br><br>
-              The agent exposes REST APIs at <code>/api/rocm</code> and <code>/api/xpu</code> that this dashboard polls for telemetry data.
-            </div>
+          </div>
+          <div class="http-tooltip" id="http-tooltip">
+            <strong>HTTP Sources (ROCm / Intel XPU)</strong><br><br>
+            HTTP connections require the monitoring agent to be installed on the remote endpoint.<br><br>
+            <strong>Quick Setup (Linux):</strong><br>
+            1. Clone this repo: <code>git clone https://github.com/riversde/GPU-AI-Monitor.git</code><br>
+            2. Install Flask: <code>pip3 install flask</code><br>
+            3. Ensure GPU CLI tools are installed:<br>
+            &nbsp;&nbsp;• AMD ROCm: <code>amd-smi</code> / <code>rocm-smi</code><br>
+            &nbsp;&nbsp;• Intel XPU: <code>xpu-smi</code> / <code>xpumanager</code><br>
+            4. Run the agent: <code>python3 agent/monitor_agent.py --type rocm</code><br>
+            &nbsp;&nbsp;(or <code>--type xpu</code> for Intel, or omit for auto-detect)<br>
+            5. Ensure the firewall allows inbound connections on the chosen port<br><br>
+            <strong>Standalone binary (no Python needed):</strong><br>
+            Build with: <code>bash scripts/build_linux.sh</code> → outputs <code>dist/monitor_agent</code><br>
+            Deploy and run: <code>./dist/monitor_agent --type rocm --port 5900</code><br><br>
+            The agent exposes REST APIs at <code>/api/rocm</code> and <code>/api/xpu</code> that this dashboard polls for telemetry data.
           </div>
         </div>
 

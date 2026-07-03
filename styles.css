@@ -260,13 +260,13 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
-  width: 520px;
+  width: 560px;
   max-width: 90vw;
   max-height: 80vh;
   overflow-y: auto;
 }
 
-.modal-content h2 { margin-bottom: 16px; }
+.modal-content h2 { margin-bottom: 16px; font-size: 1.1rem; }
 
 /* Modal tabs */
 .modal-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
@@ -316,7 +316,7 @@ body {
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px;
+  padding: 14px;
   margin-bottom: 10px;
 }
 
@@ -325,6 +325,16 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  gap: 8px;
+  min-width: 0;
+}
+
+.source-entry-header strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .source-entry-header select {
@@ -339,7 +349,7 @@ body {
 
 .source-entry-fields { display: flex; flex-wrap: wrap; gap: 8px; }
 
-.source-entry-fields .form-group { flex: 1; min-width: 120px; margin-bottom: 0; }
+.source-entry-fields .form-group { flex: 1 1 160px; min-width: 0; margin-bottom: 0; }
 
 .source-entry-fields input, .source-entry-fields select {
   width: 100%;
@@ -349,6 +359,16 @@ body {
   color: var(--text-primary);
   border-radius: 4px;
   font-size: 0.82rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.source-entry-fields input:focus {
+  white-space: normal;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
 .source-entry-toggle {
@@ -362,7 +382,7 @@ body {
 
 .source-entry-toggle input[type="checkbox"] { accent-color: var(--accent-green); }
 
-.form-actions { display: flex; gap: 8px; margin-top: 16px; }
+.form-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 16px; }
 
 .btn {
   padding: 7px 14px;
@@ -399,7 +419,7 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
 
-/* HTTP info tooltip */
+/* HTTP info tooltip — click toggle via JS */
 .http-info-icon {
   display: inline-flex;
   align-items: center;
@@ -421,11 +441,13 @@ body {
   opacity: 1;
   transform: scale(1.1);
 }
+
 .http-tooltip {
   display: none;
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 0;
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -436,7 +458,7 @@ body {
   font-size: 0.8rem;
   line-height: 1.5;
   color: var(--text-primary);
-  z-index: 9999;
+  z-index: 10001;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 .http-tooltip code {
@@ -448,8 +470,4 @@ body {
 }
 .http-tooltip strong {
   color: var(--text-primary);
-}
-#http-info-icon:hover + .http-tooltip,
-.http-tooltip:hover {
-  display: block;
 }

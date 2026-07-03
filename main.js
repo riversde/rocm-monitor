@@ -3,9 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const isDev = !app.isPackaged;
 
-// Disable GPU acceleration before app ready — fixes silent window failures on Windows
-app.commandLine.appendSwitch('disable-gpu');
-try { app.disableHardwareAcceleration(); } catch {}
+// Keep GPU acceleration enabled — disable only if renderer crashes
+// app.commandLine.appendSwitch('disable-gpu');
+// try { app.disableHardwareAcceleration(); } catch {}
 
 let mainWindow = null;
 let tray = null;
