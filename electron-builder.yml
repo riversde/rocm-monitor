@@ -26,11 +26,5 @@ linux:
       arch: x64
   icon: build/icon.svg
   category: Utility
-  desktop:
-    Name: GPU Monitor for AI Workloads
-    Comment: Multi-source GPU telemetry dashboard
-    Type: Application
-    Terminal: false
-    Icon: gpu-monitor-ai
   maintainer: riversde
   vendor: riversde

@@ -88,7 +88,7 @@ echo ""
 # ── Step 4: Install project deps ───────────────────────
 echo "▶ Step 4: Installing project dependencies..."
 cd "$PROJECT_DIR"
-npm ci --production --ignore-scripts 2>&1 || npm install --production 2>&1
+npm ci --ignore-scripts 2>&1 || npm install --ignore-scripts 2>&1
 echo "  ✓ Dependencies installed"
 echo ""
 
