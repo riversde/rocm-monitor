@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628"/>
+      <stop offset="100%" style="stop-color:#1a2d4a"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d4a7a"/>
+      <stop offset="100%" style="stop-color:#1a3355"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff"/>
+      <stop offset="100%" style="stop-color:#0066ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="32" fill="url(#bg)"/>
+  <!-- GPU Chip -->
+  <rect x="64" y="64" width="128" height="128" rx="8" fill="url(#chip)" stroke="#3d6a9a" stroke-width="2"/>
+  <rect x="80" y="80" width="96" height="96" rx="4" fill="#0d1f33"/>
+  <!-- Core blocks -->
+  <rect x="96" y="96" width="28" height="28" rx="2" fill="url(#accent)" opacity="0.9"/>
+  <rect x="132" y="96" width="28" height="28" rx="2" fill="url(#accent)" opacity="0.7"/>
+  <rect x="96" y="132" width="28" height="28" rx="2" fill="url(#accent)" opacity="0.7"/>
+  <rect x="132" y="132" width="28" height="28" rx="2" fill="url(#accent)" opacity="0.9"/>
+  <!-- Pins left -->
+  <rect x="52" y="84" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="52" y="100" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="52" y="116" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="52" y="132" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="52" y="148" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="52" y="164" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <!-- Pins right -->
+  <rect x="196" y="84" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="196" y="100" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="196" y="116" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="196" y="132" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="196" y="148" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <rect x="196" y="164" width="8" height="6" rx="1" fill="#5a8ab5"/>
+  <!-- Pins top -->
+  <rect x="84" y="52" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <rect x="100" y="52" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <rect x="116" y="52" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <rect x="132" y="52" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <!-- Pins bottom -->
+  <rect x="84" y="196" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <rect x="100" y="196" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <rect x="116" y="196" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <rect x="132" y="196" width="6" height="8" rx="1" fill="#5a8ab5"/>
+  <!-- Activity bars -->
+  <rect x="92" y="176" width="20" height="4" rx="2" fill="#00d4ff" opacity="0.8"/>
+  <rect x="116" y="176" width="20" height="4" rx="2" fill="#00d4ff" opacity="0.5"/>
+  <rect x="140" y="176" width="24" height="4" rx="2" fill="#00d4ff" opacity="0.8"/>
+  <rect x="92" y="184" width="24" height="4" rx="2" fill="#00d4ff" opacity="0.6"/>
+  <rect x="120" y="184" width="16" height="4" rx="2" fill="#00d4ff" opacity="0.9"/>
+  <rect x="140" y="184" width="24" height="4" rx="2" fill="#00d4ff" opacity="0.7"/>
+</svg>

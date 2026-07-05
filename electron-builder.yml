@@ -1,0 +1,36 @@
+appId: com.gpu-monitor.ai
+productName: GPU Monitor for AI Workloads
+win:
+  target:
+    - target: nsis
+      arch: x64
+    - target: zip
+      arch: x64
+  icon: build/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: GPU Monitor for AI Workloads
+  perMachine: true
+  include: build/installer.nsh
+linux:
+  target:
+    - target: AppImage
+      arch: x64
+    - target: tar.gz
+      arch: x64
+  icon: build/icon.svg
+  category: Utility
+  desktop:
+    Name: GPU Monitor for AI Workloads
+    Comment: Multi-source GPU telemetry dashboard
+    Type: Application
+    Terminal: false
+    Icon: gpu-monitor-ai
+  maintainer: riversde
+  vendor: riversde
