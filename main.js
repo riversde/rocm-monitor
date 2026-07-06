@@ -50,8 +50,8 @@ function createWindow() {
     minWidth: 700,
     minHeight: 500,
     show: false,
+    showInTaskbar: false,       // tray-only — hide from taskbar entirely
     fullscreenable: false,
-    showInTaskbar: false,       // tray-only app — hide from taskbar entirely
     backgroundColor: '#1a1a2e',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
