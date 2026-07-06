@@ -51,6 +51,7 @@ function createWindow() {
     minHeight: 500,
     show: false,
     fullscreenable: false,
+    showInTaskbar: false,       // tray-only app — hide from taskbar entirely
     backgroundColor: '#1a1a2e',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -255,7 +256,7 @@ ipcMain.handle('run-nvidia-smi', async () => {
 });
 // IPC: Window controls from renderer
 ipcMain.on('window-minimize', () => {
-  if (mainWindow) mainWindow.minimize();
+  if (mainWindow) mainWindow.hide(); // hide instead of minimize — tray-only app
 });
 
 ipcMain.on('window-maximize', () => {
